@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Success</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: linear-gradient(to bottom, #0070BA, #005EA6);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .container {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .icon {
+            color: #28A745;
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+        .transaction {
+            color: #0070BA;
+            font-weight: bold;
+            margin-top: 10px;
+            word-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">✔</div>
+        <h1>Payment Successful</h1>
+        <p>Thank you for your purchase! Your payment has been processed successfully.</p>
+        <div class="transaction">PayPal Order ID: <span id="orderId">Loading...</span></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Function to get URL parameters
+            function getParameterByName(name) {
+                const url = window.location.href;
+                name = name.replace(/[\[\]]/g, '\\$&');
+                const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+                const results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            }
+            
+            // PayPal adds token and PayerID parameters, but also includes the order ID in the token
+            // or you can extract it from the URL if PayPal includes it
+            let orderId = getParameterByName('token') || 'Not available';
+            
+            // If you're using PayPal's v2 checkout, the order ID might be directly available
+            const directOrderId = getParameterByName('orderId');
+            if (directOrderId) {
+                orderId = directOrderId;
+            }
+            
+            document.getElementById('orderId').textContent = orderId;
+        });
+    </script>
+</body>
+</html>
